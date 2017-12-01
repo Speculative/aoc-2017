@@ -4,16 +4,14 @@ p = '649713959682898259577777982349515784822684939966191359164369933435366431847
 
 n = len(p)
 
-# Part 1
-
-def value(pair_index, i):
+def value_at(pair_index, i):
     return int(p[i]) if p[i] == p[pair_index(i)] else 0
 
 def solve_captcha(pair_index):
-    return sum(map(partial(value, pair_index), range(n)))
+    return sum(map(partial(value_at, pair_index), range(n)))
 
+# Part 1: successor element with wraparound
 print(solve_captcha(lambda i: (i + 1) % n))
 
-# Part 2
-
+# Part 2: "halfway around"
 print(solve_captcha(lambda i: (i + n // 2) % n))
