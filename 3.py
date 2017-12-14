@@ -1,6 +1,5 @@
 from math import sqrt, ceil
-from functools import partial
-from pprint import pprint
+from grid_utils import empty, look, R, U, L, D, ALL
 
 p = 325489
 
@@ -31,28 +30,12 @@ dist = abs(corner - (side // 2) - bottom_place) + side // 2
 print(dist)
 
 # Part 2: Cumulative spiral sum
-# I've given up on trying to find a functional way to generate a spiral matrix
-def look(grid, pos, direction):
-    v = grid[pos[0] + direction[0]][pos[1] + direction[1]]
-    return v
-
-R = ( 1,  0)
-U = ( 0,  1)
-L = (-1,  0)
-D = ( 0, -1)
-
-UR = ( 1,  1)
-UL = (-1,  1)
-DR = ( 1, -1)
-DL = (-1, -1)
+# The order of this sequence gives the shape of the spiral
 sequence = [R, U, L, D]
-all_directions = [R, U, L, D, UR, UL, DR, DL]
 direction = 0
 
 # I have no idea how large this grid actually needs to be
-# Fun side note do NOT use [[0] * side] to generate lists,
-# it produces multiple refs to the same list object
-grid = [[0 for i in range(side)] for j in range(side)]
+grid = empty(side, side, 0)
 v = 1
 x = side // 2
 y = side // 2
@@ -63,6 +46,6 @@ while (v < p):
         direction = next_direction
     x += sequence[direction][0]
     y += sequence[direction][1]
-    v = sum(map(partial(look, grid, (x,  y)), all_directions))
+    v = sum(look(grid, (x,  y), d) for d in ALL)
 
 print(v)
