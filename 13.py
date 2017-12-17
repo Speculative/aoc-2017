@@ -10,20 +10,19 @@ with open('13.in', 'r') as f:
 # Cycles are 2*(r-1)
 
 def cross(off=0):
-    sev = 0
-    caught = False
     for l, r in fw.items():
         if (l + off) % ((r - 1) * 2) == 0:
-            sev += l * r
-            caught = True
-    return (sev, caught)
+            yield(l * r, True)
+        else:
+            yield(0, False)
 
 # Part 1: severity from crossing without delay
-print(cross()[0])
+print(sum(sev for sev, _ in cross()))
 
 # Part 2: minimum delay to cross without being caught
-delay = 1
-while cross(delay)[1]:
+delay = 0
+# Combining any with cross() generator lets us fail fast to reduce # of calculations
+while any(caught for _, caught in cross(delay)):
     delay += 1
 
 print(delay)
